@@ -16,7 +16,6 @@
 //! To run this example clone this repository and run:
 //! `cargo run --example epd_154
 
-
 #![no_std]
 #![no_main]
 use defmt_rtt as _;
@@ -24,21 +23,21 @@ use panic_probe as _;
 use rp_pico as bsp;
 
 use defmt::{info, println};
-use embedded_graphics::Drawable;
 use embedded_graphics::geometry::{Point, Size};
 use embedded_graphics::mono_font::ascii::FONT_6X9;
 use embedded_graphics::mono_font::MonoTextStyleBuilder;
 use embedded_graphics::prelude::Primitive;
 use embedded_graphics::primitives::{Circle, Line, PrimitiveStyle, Rectangle};
 use embedded_graphics::text::Text;
+use embedded_graphics::Drawable;
 use embedded_hal::delay::DelayNs;
 use embedded_hal::digital::StatefulOutputPin;
 use embedded_hal_bus::spi::ExclusiveDevice;
-use rp_pico::{entry, pac};
-use rp_pico::hal::{spi, Clock, Sio, Watchdog};
 use rp_pico::hal::clocks::init_clocks_and_plls;
 use rp_pico::hal::fugit::RateExtU32;
 use rp_pico::hal::gpio::FunctionSpi;
+use rp_pico::hal::{spi, Clock, Sio, Watchdog};
+use rp_pico::{entry, pac};
 use ssd1681::color::{Black, Red, White};
 use ssd1681::driver::Ssd1681;
 use ssd1681::graphics::{Display, Display1in54, DisplayRotation};
@@ -63,14 +62,13 @@ fn main() -> ! {
         &mut pac.RESETS,
         &mut watchdog,
     )
-        .ok()
-        .unwrap();
+    .ok()
+    .unwrap();
 
     let mut delay = DelayCompat(cortex_m::delay::Delay::new(
         core.SYST,
         clocks.system_clock.freq().to_Hz(),
     ));
-
 
     let pins = bsp::Pins::new(
         pac.IO_BANK0,
@@ -174,11 +172,7 @@ fn draw_ruler(display: &mut Display1in54) {
 
         if col % 50 == 0 {
             let mut buf = [0u8; 4];
-            let label = format_no_std::show(
-                &mut buf,
-                format_args!("{}", col),
-            ).unwrap();
-            
+            let label = format_no_std::show(&mut buf, format_args!("{}", col)).unwrap();
             draw_text(display, &label, col as i32, 12);
         }
     }
@@ -190,12 +184,7 @@ fn draw_text(display: &mut Display1in54, text: &str, x: i32, y: i32) {
         .text_color(Black)
         .background_color(White)
         .build();
-    let _ = Text::new(
-        text,
-        Point::new(x, y),
-        style,
-    ).draw(display);
-
+    let _ = Text::new(text, Point::new(x, y), style).draw(display);
 }
 
 /// Wrapper around `Delay` to implement the embedded-hal 1.0 delay.
