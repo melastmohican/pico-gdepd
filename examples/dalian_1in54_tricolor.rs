@@ -19,8 +19,6 @@
 #![no_std]
 #![no_main]
 
-
-
 #[cfg(not(target_abi = "eabi"))]
 fn main() {}
 
@@ -43,25 +41,17 @@ use embedded_graphics::{
     Drawable,
 };
 #[cfg(target_abi = "eabi")]
-use embedded_hal::{
-    delay::DelayNs,
-    digital::StatefulOutputPin,
-};
+use embedded_hal::{delay::DelayNs, digital::StatefulOutputPin};
 #[cfg(target_abi = "eabi")]
 use embedded_hal_bus::spi::ExclusiveDevice;
 #[cfg(target_abi = "eabi")]
 use rp_pico::{
     entry,
-    pac,
     hal::{
-        clocks::init_clocks_and_plls,
-        fugit::RateExtU32,
-        gpio::FunctionSpi,
-        spi,
-        Clock,
-        Sio,
+        clocks::init_clocks_and_plls, fugit::RateExtU32, gpio::FunctionSpi, spi, Clock, Sio,
         Watchdog,
     },
+    pac,
 };
 #[cfg(target_abi = "eabi")]
 use ssd1681::{
